@@ -14,8 +14,11 @@ public class StoreEntity {
     private Double distance_store;
     private String typeofstore;
     private String foodindetail;
+    @Column(name = "phonenum")
+    private String phonenum;
 
     // 생성자, 게터 및 세터
+
 
     public StoreEntity() {
     }
@@ -60,4 +63,8 @@ public class StoreEntity {
     }
 
     public void setFoodindetail(String foodindetail) { this.foodindetail = foodindetail; }
+
+    public String getPhonenum() { return phonenum; }
+
+    public void setPhonenum(String phonenum) { this.phonenum = phonenum; }
 }

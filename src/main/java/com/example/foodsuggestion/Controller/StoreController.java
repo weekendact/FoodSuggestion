@@ -1,19 +1,15 @@
 package com.example.foodsuggestion.Controller;
 
+import com.example.foodsuggestion.Data.DTO.StoreInfoDTO;
 import com.example.foodsuggestion.Data.Entity.StoreEntity;
 import com.example.foodsuggestion.Data.Repository.StoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/stores")
@@ -25,29 +21,30 @@ public class StoreController {
         this.storeRepository = storeRepository;
     }
 
-    @GetMapping(value = "/getStoreInfoh", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public StoreEntity getStoreInfoh(@RequestParam(name = "id_store") Long idStore) {
-        return storeRepository.findById(idStore).orElse(null);
-    }
 
-    @GetMapping("/getStoreInfo")
-    public ResponseEntity<List<Long>> getStoreInfo(
-            @RequestParam(name = "typeofstore") String typeOfStore,
-            @RequestParam(name = "foodindetail") String foodInDetail) {
+// http://localhost:8080/stores/getStoreInfo?foodindetail=커피
+// 커피가 주 메뉴인 음식점 이름, 거리, 전화번호 반환 GET방식
+    @GetMapping(value = "/getStoreInfo", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<StoreInfoDTO>> getStoreInfo(@RequestParam(name = "foodindetail") String foodindetail) {
+        List<StoreEntity> storeEntities = storeRepository.findStoreInfoByFoodindetail(foodindetail);
 
-        // 검색 조건: typeofstore와 foodindetail이 일치하는 가게들을 찾는다.
-        List<StoreEntity> stores = storeRepository.findByTypeofstoreAndFoodindetail(typeOfStore, foodInDetail);
-
-        if (stores.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (storeEntities.isEmpty()) {
+            return ResponseEntity.notFound().build();
         }
 
-        // stores에서 id_store만 추출하여 새로운 리스트를 만듭니다.
-        List<Long> ids = stores.stream()
-                .map(StoreEntity::getId_store)
-                .collect(Collectors.toList());
+        // 선택한 필드를 가지고 있는 DTO를 생성하고, 응답을 위해 필드를 설정합니다
+        List<StoreInfoDTO> storeInfoDTOs = new ArrayList<>();
+        for (StoreEntity entity : storeEntities) {
+            StoreInfoDTO dto = new StoreInfoDTO();
+            dto.setName_store(entity.getName_store());
+            dto.setDistance_store(entity.getDistance_store());
+            dto.setPhonenum(entity.getPhonenum());
+            storeInfoDTOs.add(dto);
+        }
 
-        return new ResponseEntity<>(ids, HttpStatus.OK);
+        return ResponseEntity.ok(storeInfoDTOs);
     }
-
 }
+
+
+
