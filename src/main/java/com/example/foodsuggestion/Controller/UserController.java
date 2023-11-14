@@ -65,7 +65,7 @@ public class UserController {
 
 
     // 사용자 이름과 비밀번호를 사용한 로그인
-    // http://localhost:8080/logibn POST 방식
+    // http://localhost:8080/login POST 방식
     // name_user : name_user,
     // passwd_user : passwd_user
     // 성공 시 로그인 성공 반환
@@ -140,4 +140,3 @@ public class UserController {
     }
 
 }
-
