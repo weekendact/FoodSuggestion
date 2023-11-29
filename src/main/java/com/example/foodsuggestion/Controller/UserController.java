@@ -3,6 +3,7 @@ package com.example.foodsuggestion.Controller;
 import com.example.foodsuggestion.Data.Entity.AllergyInfoEntity;
 import com.example.foodsuggestion.Data.Repository.AllergyInfoRepository;
 import com.example.foodsuggestion.Data.Entity.UserEntity;
+import com.example.foodsuggestion.Service.UserService;
 import com.example.foodsuggestion.Data.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +16,15 @@ import java.util.Optional;
 public class UserController {
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private AllergyInfoRepository allergyInfoRepository;
 
-    // 사용자 등록
+    // 회원가입
     // http://localhost:8080/register POST 방식으로
     // "name_user" : varchar20,
     // "passwd_user" : varchar20,
@@ -139,4 +143,16 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("deleteUser/{userId}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
+
+        boolean success = userService.deleteUser(userId);
+
+        if (success) {
+            return ResponseEntity.ok("회원탈퇴.");
+        } else {
+            return ResponseEntity.badRequest().body("회원탈퇴 실패");
+        }
+    }
 }
+

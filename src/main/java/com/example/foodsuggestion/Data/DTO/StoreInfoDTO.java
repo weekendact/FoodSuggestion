@@ -1,9 +1,14 @@
 package com.example.foodsuggestion.Data.DTO;
 
+import java.util.List;
+
 public class StoreInfoDTO {
     private String name_store;
     private Double distance_store;
     private String phonenum;
+    private List<String> foodIndetail;
+
+//    private String foodindetail;
 
     public StoreInfoDTO() {
         // 기본 생성자
@@ -32,4 +37,8 @@ public class StoreInfoDTO {
     public void setPhonenum(String phonenum) {
         this.phonenum = phonenum;
     }
+
+    public List<String> getFoodIndetail() { return foodIndetail; }
+
+    public void setFoodIndetail(List<String> foodIndetail) { this.foodIndetail = foodIndetail; }
 }

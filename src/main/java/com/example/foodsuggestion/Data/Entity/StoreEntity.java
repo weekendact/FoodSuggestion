@@ -12,7 +12,10 @@ public class StoreEntity {
     private Long id_store;
     private String name_store;
     private Double distance_store;
+
+    @Column(name = "typeofstore")
     private String typeofstore;
+    @Column(name = "foodindetail")
     private String foodindetail;
     @Column(name = "phonenum")
     private String phonenum;
